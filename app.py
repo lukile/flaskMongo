@@ -1,6 +1,5 @@
 import json
 from flask import Flask, request, jsonify
-from flask_pymongo import PyMongo
 from pymongo import MongoClient
 import os
 
@@ -14,7 +13,6 @@ app.config["MONGO_URI"] = "mongodb+srv://" + DB_NAME + ":password" + DB_PWD + "@
 
 client = MongoClient("mongodb+srv://" + DB_NAME + ":password" + DB_PWD + "@clustertest.swcx9.mongodb.net/pythonFlask" \
                      "?retryWrites=true&w=majority")
-mongo = PyMongo(app)
 
 db = client.pythonFlask
 user_table = db.user
