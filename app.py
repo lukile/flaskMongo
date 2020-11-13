@@ -1,15 +1,19 @@
 import json
 from flask import Flask, request, jsonify
-from flask_mongoengine import MongoEngine
 from flask_pymongo import PyMongo
 from pymongo import MongoClient
+import os
 
 app = Flask(__name__)
 
-app.config["MONGO_URI"] = "replace with correct URI"
+DB_NAME = os.environ["DB_NAME"]
+DB_PWD = os.environ["DB_PWD"]
 
-client = MongoClient("same URI as before")
+app.config["MONGO_URI"] = "mongodb+srv://" + DB_NAME + ":password" + DB_PWD + "@clustertest.swcx9.mongodb.net/pythonFlask" \
+                          "?retryWrites=true&w=majority"
 
+client = MongoClient("mongodb+srv://" + DB_NAME + ":password" + DB_PWD + "@clustertest.swcx9.mongodb.net/pythonFlask" \
+                     "?retryWrites=true&w=majority")
 mongo = PyMongo(app)
 
 db = client.pythonFlask
@@ -19,6 +23,7 @@ try:
     db.command("serverStatus")
 except Exception as e:
     print(e)
+
 else:
     print("You are connected")
 
@@ -76,6 +81,7 @@ def delete_user(name):
     user_table.delete_one(user)
 
     return query_users()
+
 
 '''
 
