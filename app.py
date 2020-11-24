@@ -1,18 +1,44 @@
 import json
 from flask import Flask, request, jsonify
 from pymongo import MongoClient
+
 import os
 
 app = Flask(__name__)
 
+'''
+from google.cloud import secretmanager
+
+project_id = os.environ["GCP_PROJECT"]
+
+secret_client = secretmanager.SecretManagerServiceClient()
+db_name = f"projects/{project_id}/secrets/DB_NAME/versions/1"
+
+db_pwd = f"projects/{project_id}/secrets/DB_PWD/versions/1"
+
+db_name_response = secret_client.access_secret_version(name=db_name)
+db_pwd_response = secret_client.access_secret_version(name=db_pwd)
+
+secret_db_name_value = db_name_response.payload.data.decode('UTF-8')
+secret_db_pwd_value = db_pwd_response.payload.data.decode('UTF-8')
+
+def get_db_name(request):
+    return secret_db_name_value
+
+def get_db_pwd(request):
+    return secret_db_pwd_value
+'''
+
+
 DB_NAME = os.environ["DB_NAME"]
 DB_PWD = os.environ["DB_PWD"]
 
-app.config["MONGO_URI"] = "mongodb+srv://" + DB_NAME + ":password" + DB_PWD + "@clustertest.swcx9.mongodb.net/pythonFlask" \
-                          "?retryWrites=true&w=majority"
+app.config[
+    "MONGO_URI"] = "mongodb+srv://" + DB_NAME + ":password" + DB_PWD + "@clustertest.swcx9.mongodb.net/pythonFlask" \
+                                                                       "?retryWrites=true&w=majority"
 
 client = MongoClient("mongodb+srv://" + DB_NAME + ":password" + DB_PWD + "@clustertest.swcx9.mongodb.net/pythonFlask" \
-                     "?retryWrites=true&w=majority")
+                                                                         "?retryWrites=true&w=majority")
 
 db = client.pythonFlask
 user_table = db.user
@@ -38,7 +64,7 @@ def create_user():
     return json.dumps(user, default=str)
 
 
-@app.route('/find/users/', methods=['GET'])
+@app.route('/', methods=['GET'])
 def query_users():
     users = user_table.find({}, {'_id': False})
 
@@ -80,22 +106,6 @@ def delete_user(name):
 
     return query_users()
 
-
-'''
-
-
-
-@app.route('/', methods=["DELETE"])
-def delete_user():
-    record = json.loads(request.data)
-    user = User.objects(name=record["name"]).first()
-
-    if not user:
-        return jsonify({'error': 'user not found'})
-    else:
-        user.delete()
-    return jsonify(user.to_json())
-'''
 
 if __name__ == '__main__':
     app.run()
