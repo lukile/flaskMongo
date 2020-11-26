@@ -2,13 +2,7 @@ import json
 from flask import Flask, request, jsonify
 from pymongo import MongoClient
 
-import os
-
 app = Flask(__name__)
-
-DB_URI = ""
-DB_PORT = ""
-DB_NAME = ""
 
 app.config[
     "MONGO_URI"] = "mongodb://" + DB_URI + ":" + DB_PORT + "/" + DB_NAME
