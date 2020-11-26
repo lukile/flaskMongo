@@ -3,6 +3,7 @@ before_script:
   - curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
   - apt-get update
   - apt-get -qq -y install google-cloud-sdk
+  - sed -i -e "s/DB_URI/$DB_URI/g" -e "s/DB_PORT/$DB_PORT/g" -e "s/DB_NAME/$DB_NAME/g" main.py
 
 after_script:
   - rm /tmp/$CI_PIPELINE_ID.json
@@ -13,9 +14,6 @@ deploy:
   only:
     - main
   script:
-    - export DB_URI=$DB_URI
-    - export DB_PORT=$DB_PORT
-    - export DB_NAME=$DB_NAME
     - echo $SERVICE_ACCOUNT > /tmp/$CI_PIPELINE_ID.json
     - gcloud auth activate-service-account --key-file /tmp/$CI_PIPELINE_ID.json
     - gcloud --quiet --project $PROJECT_ID app deploy

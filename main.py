@@ -6,9 +6,9 @@ import os
 
 app = Flask(__name__)
 
-DB_URI = os.environ["DB_URI"]
-DB_PORT = os.environ["DB_PORT"]
-DB_NAME = os.environ["DB_NAME"]
+DB_URI = ""
+DB_PORT = ""
+DB_NAME = ""
 
 app.config[
     "MONGO_URI"] = "mongodb://" + DB_URI + ":" + DB_PORT + "/" + DB_NAME
