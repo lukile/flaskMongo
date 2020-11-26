@@ -13,10 +13,7 @@ deploy:
   only:
     - main
   script:
-    - echo $DB_NAME
-    - sed "s/DB_URI/$DB_URI/g" main.py
-    - sed "s/DB_PORT/$DB_PORT/g" main.py
-    - sed "s/DB_NAME/$DB_NAME/g" main.py
+    - sed -i "s/DB_URI/$DB_URI/g" -e "s/DB_PORT/$DB_PORT/g" -e "s/DB_NAME/$DB_NAME/g" main.py
     - echo $SERVICE_ACCOUNT > /tmp/$CI_PIPELINE_ID.json
     - gcloud auth activate-service-account --key-file /tmp/$CI_PIPELINE_ID.json
     - gcloud --quiet --project $PROJECT_ID app deploy
