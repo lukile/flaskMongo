@@ -7,17 +7,17 @@ before_script:
 after_script:
   - rm /tmp/$CI_PIPELINE_ID.json
 
-variables:
-  DB_URI: $DB_URI
-  DB_PORT: $DB_PORT
-  DB_NAME: $DB_NAME
-
 deploy:
   stage: deploy
   environment: Production
+  variables:
+    DB_URI: $DB_URI
+    DB_PORT: $DB_PORT
+    DB_NAME: $DB_NAME
   only:
     - main
   script:
+    - echo $DB_NAME
     - echo $SERVICE_ACCOUNT > /tmp/$CI_PIPELINE_ID.json
     - gcloud auth activate-service-account --key-file /tmp/$CI_PIPELINE_ID.json
     - gcloud --quiet --project $PROJECT_ID app deploy
